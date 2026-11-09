@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Kwitansi Resmi - PT POS INDONESIA KANTORPOS ENDE 86300</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Inter & Font Stempel/Serif -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2canvas for downloading as image -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pos: {
+                            blue: '#1C2D5A',
+                            darkblue: '#132042',
+                            lightblue: '#2A437E',
+                            softblue: '#EEF2FF',
+                            gray: '#333333',
+                            lightgray: '#F4F5F7'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        receipt: ['Merriweather', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Styles for Print & Receipt */
+        .terbilang-box {
+            min-height: 42px;
+            border-bottom: 1px solid #64748b;
+        }
+
+        #posStamp[hidden] {
+            display: none !important;
+        }
+
+        /* Print CSS Override */
+        @media print {
+            body {
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                color: black !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-only-container {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
+            #receiptCard {
+                box-shadow: none !important;
+                border: 2px solid #000 !important;
+                margin: 0 auto !important;
+                page-break-inside: avoid;
+            }
+            #receiptTitleRow {
+                flex-direction: column !important;
+                justify-content: center !important;
+                align-items: center !important;
+                gap: 0.35rem !important;
+            }
+            #receiptTitleText {
+                position: static !important;
+                transform: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: 0 !important;
+                background: transparent !important;
+                box-shadow: none !important;
+                color: #000 !important;
+                font-size: 1.5rem !important;
+                line-height: 1.25 !important;
+                letter-spacing: 0.2em !important;
+                white-space: nowrap !important;
+            }
+            #receiptNumber {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                gap: 0.25rem !important;
+                text-align: center !important;
+                white-space: nowrap !important;
+            }
+            #receiptNumberLabel {
+                display: inline !important;
+            }
+            #viewNoKwitansi {
+                display: inline-block !important;
+                white-space: nowrap !important;
+            }
+            .page-break {
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-100 font-sans min-h-screen text-slate-800 antialiased selection:bg-pos-blue selection:text-white pb-12">
+
+    <!-- Header Navigation Bar (No Print) -->
+    <header class="no-print bg-pos-blue text-white shadow-md sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-white/10 text-white p-2 rounded-lg font-bold border border-white/20 shadow-inner">
+                    <i class="fa-solid fa-receipt text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-white text-lg leading-tight">E-Kwitansi POS Indonesia</h1>
+                    <p class="text-xs text-blue-200">Kantorpos Ende 86300</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-2">
+                <button onclick="resetForm()" class="px-3 py-2 text-xs font-semibold text-blue-100 hover:text-white hover:bg-white/10 rounded-lg transition border border-white/20">
+                    <i class="fa-solid fa-rotate-left mr-1"></i> Reset
+                </button>
+                <button onclick="downloadAsImage()" class="px-3.5 py-2 text-xs font-semibold text-slate-800 bg-white hover:bg-slate-100 rounded-lg transition shadow-sm flex items-center">
+                    <i class="fa-solid fa-file-image mr-1.5 text-pos-blue"></i> Unduh PNG
+                </button>
+                <button onclick="window.print()" class="px-4 py-2 text-xs font-bold text-white bg-pos-lightblue hover:bg-blue-600 rounded-lg transition shadow flex items-center border border-blue-400/30">
+                    <i class="fa-solid fa-print mr-2 text-sm"></i> Cetak / Simpan PDF
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Grid -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+            <!-- LEFT PANEL: FORM EDITOR (No Print) -->
+            <div class="no-print lg:col-span-5 space-y-6">
+                
+                <!-- Main Form Card -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-50 border-b border-slate-200 px-5 py-4 flex justify-between items-center">
+                        <h2 class="font-bold text-slate-800 flex items-center">
+                            <i class="fa-solid fa-pen-to-square text-pos-blue mr-2"></i> Editor Kwitansi
+                        </h2>
+                        <span class="text-xs bg-blue-50 text-pos-blue font-semibold px-2.5 py-1 rounded-full border border-blue-200">Mode Interaktif</span>
+                    </div>
+
+                    <form id="receiptForm" class="p-5 space-y-4" onsubmit="event.preventDefault();">
+                        
+                        <!-- Header & Logo Settings -->
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-3">
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Logo Perusahaan</label>
+                            <div class="flex items-center space-x-3">
+                                <img id="logoPreviewThumb" src="pos-logo_rvgqfe.png" onerror="this.src='https://placehold.co/120x60/1C2D5A/ffffff?text=POS+IND'" class="h-10 w-auto object-contain bg-white p-1 rounded border border-slate-200" alt="Logo Preview">
+                                <div class="flex-1">
+                                    <input type="file" id="logoInput" accept="image/*" class="hidden" onchange="handleLogoUpload(event)">
+                                    <button type="button" onclick="document.getElementById('logoInput').click()" class="text-xs bg-white hover:bg-slate-100 text-slate-700 font-semibold px-3 py-1.5 border border-slate-300 rounded shadow-sm">
+                                        <i class="fa-solid fa-upload mr-1 text-slate-500"></i> Ganti Logo
+                                    </button>
+                                    <button type="button" onclick="resetDefaultLogo()" class="text-xs text-slate-500 hover:text-red-600 ml-2">
+                                        Reset Default
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- No Kwitansi & Tanggal -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">No. Kwitansi / Tanda Terima</label>
+                                <input type="text" id="inputNoKwitansi" class="w-full text-xs font-mono p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-pos-blue focus:bg-white transition outline-none" placeholder="KW/POS/2026/001">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Metode Pembayaran</label>
+                                <select id="inputMetode" onchange="updateReceipt()" class="w-full text-xs p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-pos-blue focus:bg-white transition outline-none">
+                                    <option value="TUNAI">TUNAI</option>
+                                    <option value="TRANSFER BANK">TRANSFER BANK</option>
+                                    <option value="QRIS">QRIS / POSPAY</option>
+                                    <option value="CEK / GIRO">CEK / GIRO</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Sudah Terima Dari -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Sudah Terima Dari (Nama Pembayar)</label>
+                            <input type="text" id="inputDiterimaDari" class="w-full text-xs p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-pos-blue focus:bg-white transition outline-none" placeholder="Bpk. Ahmad Fauzi / PT Sinar Makmur">
+                        </div>
+
+                        <!-- Uang Sejumlah (Nominal) -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Jumlah Uang (Rp)</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-xs font-bold text-slate-400">Rp</span>
+                                <input type="text" id="inputNominal" class="w-full text-xs font-bold pl-9 p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-pos-blue focus:bg-white transition outline-none" placeholder="1.500.000" oninput="formatNominalAndTerbilang(this)">
+                            </div>
+                        </div>
+
+                        <!-- Terbilang (Editable Auto-generated) -->
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label class="block text-xs font-semibold text-slate-600">Terbilang (Otomatis / Manual)</label>
+                                <span class="text-[10px] text-slate-400 italic">Bisa diedit manual</span>
+                            </div>
+                            <textarea id="inputTerbilang" rows="2" class="w-full text-xs p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-pos-blue focus:bg-white transition outline-none" placeholder="Satu Juta Lima Ratus Ribu Rupiah"></textarea>
+                        </div>
+
+                        <!-- Untuk Pembayaran -->
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Untuk Pembayaran (Keterangan)</label>
+                            <textarea id="inputUntukPembayaran" rows="3" class="w-full text-xs p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-pos-blue focus:bg-white transition outline-none" placeholder="Biaya Pengiriman Logistik Dokumen & Paket POS Express Periode Oktober 2026"></textarea>
+                        </div>
+
+                        <!-- Lokasi, Tanggal & Petugas -->
+                        <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Kota & Tanggal</label>
+                                <input type="text" id="inputKotaTanggal" class="w-full text-xs p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-pos-blue focus:bg-white transition outline-none" placeholder="Ende, 27 Oktober 2026">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Petugas / Kasir</label>
+                                <input type="text" id="inputPetugas" class="w-full text-xs p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-pos-blue focus:bg-white transition outline-none" placeholder="Maria G. Nona">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Jabatan Petugas</label>
+                                <input type="text" id="inputJabatan" class="w-full text-xs p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-pos-blue focus:bg-white transition outline-none" placeholder="Petugas Loket / Kasir">
+                            </div>
+                            <div>
+                                <span class="block text-xs font-semibold text-slate-600 mb-1">Opsi Stempel Pos</span>
+                                <div class="flex items-center space-x-2 pt-2">
+                                    <input type="checkbox" id="inputShowStamp" onchange="saveReceiptDisplaySettings()" checked class="h-4 w-4 text-pos-blue rounded border-slate-300 focus:ring-pos-blue">
+                                    <label for="inputShowStamp" class="text-xs text-slate-700 cursor-pointer select-none">Tampilkan Cap Stempel</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="inputNippos" class="block text-xs font-semibold text-slate-600 mb-1">NIPPOS Petugas</label>
+                            <input type="text" id="inputNippos" class="w-full text-xs p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-pos-blue focus:bg-white transition outline-none" placeholder="Masukkan NIPPOS">
+                        </div>
+
+                        <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-3">
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Upload Stempel</label>
+                            <div>
+                                <label for="inputStampImage" class="block text-xs font-semibold text-slate-600 mb-1">Foto Stempel</label>
+                                <input type="file" id="inputStampImage" accept="image/png,image/jpeg,image/webp" class="block w-full text-xs text-slate-600 file:mr-2 file:rounded-md file:border-0 file:bg-white file:px-3 file:py-1.5 file:font-semibold file:text-slate-700 file:shadow-sm file:ring-1 file:ring-slate-300">
+                                <img id="stampImagePreview" class="mt-2 hidden h-20 w-full rounded-lg border border-slate-200 bg-white object-contain p-1" alt="Pratinjau foto stempel">
+                                <button type="button" id="removeStampImage" class="mt-2 hidden text-xs font-semibold text-red-600 hover:underline">Hapus stempel</button>
+                            </div>
+                            <p class="text-[10px] text-slate-500">Format JPG, PNG, atau WEBP, maksimal 1 MB. Latar putih dihapus otomatis; gambar tersimpan di browser ini.</p>
+                        </div>
+
+                        <!-- Action Buttons in Form -->
+                        <div class="pt-3 flex space-x-2">
+                            <button id="saveReceiptButton" type="button" onclick="saveToLocalStorage()" class="flex-1 bg-pos-blue hover:bg-pos-darkblue text-white font-medium py-2.5 rounded-lg text-xs transition shadow-sm">
+                                <i class="fa-solid fa-bookmark mr-1"></i> Simpan ke History
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- History Storage Section -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
+                    <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center justify-between">
+                        <span><i class="fa-solid fa-history mr-1.5 text-pos-blue"></i> Riwayat Kwitansi</span>
+                        <button onclick="clearHistory()" class="text-[10px] text-red-500 hover:underline">Hapus Semua</button>
+                    </h3>
+                    <div id="historySelectionControls" class="hidden mb-2 flex items-center justify-between gap-2">
+                        <label class="flex items-center gap-1.5 text-[11px] text-slate-600 cursor-pointer">
+                            <input id="selectAllHistory" type="checkbox" onchange="toggleAllHistory(this.checked)" class="h-3.5 w-3.5 rounded border-slate-300 text-pos-blue focus:ring-pos-blue">
+                            Pilih semua
+                        </label>
+                        <button id="deleteSelectedHistory" type="button" onclick="deleteSelectedHistoryItems()" disabled class="text-[10px] font-semibold text-red-500 hover:underline disabled:text-slate-400 disabled:no-underline">
+                            Hapus pilihan (0)
+                        </button>
+                    </div>
+                    <p id="historySyncStatus" class="mb-2 text-[10px] text-slate-500" role="status">Memeriksa penyimpanan riwayat...</p>
+                    <a id="historyAppLink" class="hidden mb-2 inline-block text-[10px] font-semibold text-pos-blue hover:underline" href="https://script.google.com/macros/s/AKfycbw-AgqCkvPCGIU4lUM6SjG2A3GZCVIx0Ol7Jq3tpFbxwJPISFf_TWA7TA2NG1seeO8/exec" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-table mr-1"></i>Buka aplikasi untuk simpan ke Google Sheets</a>
+                    <a id="historySpreadsheetLink" class="hidden mb-2 inline-block text-[10px] font-semibold text-pos-blue hover:underline" target="_blank" rel="noopener noreferrer">Buka Google Sheets</a>
+                    <div id="historyList" class="space-y-2 max-h-40 overflow-y-auto text-xs">
+                        <p class="text-slate-400 italic text-center py-2">Belum ada riwayat tersimpan.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RIGHT PANEL: LIVE RECEIPT PREVIEW (Print Target) -->
+            <div class="lg:col-span-7 print-only-container">
+                
+                <div class="sticky top-20">
+                    <div class="no-print flex items-center justify-between mb-2 px-1">
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Preview Kwitansi Siap Cetak</span>
+                        <span class="text-xs text-slate-400"><i class="fa-solid fa-eye mr-1"></i> Live Render</span>
+                    </div>
+
+                    <!-- Receipt Container Card -->
+                    <div id="receiptCard" class="bg-white rounded-xl shadow-xl border-2 border-pos-blue overflow-hidden relative p-6 md:p-8">
+
+                        <!-- KWITANSI HEADER -->
+                        <div class="relative z-10 border-b-2 border-pos-blue pb-4 mb-5">
+                            <div class="flex flex-row items-center justify-between gap-4">
+                                <!-- Logo Perusahaan -->
+                                <div class="w-1/3 flex justify-start">
+                                    <img id="receiptLogo" src="pos-logo_rvgqfe.png" onerror="this.src='https://placehold.co/140x70/1C2D5A/ffffff?text=POS+IND'" alt="Logo POS IND Logistik Indonesia" class="max-h-16 max-w-full object-contain">
+                                </div>
+                                
+                                <!-- Header Text (Strictly as Requested) -->
+                                <div class="w-2/3 text-right">
+                                    <h2 class="font-black text-pos-blue text-sm md:text-base tracking-wide uppercase font-sans">PT. POS INDONESIA (Persero)</h2>
+                                    <h3 class="font-bold text-pos-lightblue text-xs md:text-sm tracking-wider">KANTORPOS ENDE 86300</h3>
+                                    <p class="text-[11px] text-slate-700 mt-0.5 leading-tight">Jl. Basuki Rahmat No. 15 Ende</p>
+                                    <p class="text-[11px] text-slate-700 leading-tight">Telp / Fax (0381) - 21203</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TITLE & NO KWITANSI -->
+                        <div id="receiptTitleRow" class="relative z-10 flex flex-col md:flex-row justify-between items-center mb-6 gap-2">
+                            <div id="receiptTitleText" class="bg-pos-blue text-white font-black text-sm md:text-base px-6 py-1.5 rounded tracking-widest uppercase shadow-sm">
+                                KWITANSI
+                            </div>
+                            <div id="receiptNumber" class="text-right">
+                                <span id="receiptNumberLabel" class="text-xs text-slate-500 font-bold block md:inline">NO : </span>
+                                <span id="viewNoKwitansi" class="font-mono font-bold text-pos-blue text-sm md:text-base bg-blue-50/80 px-3 py-1 rounded border border-blue-200">KW/POS/2026/001</span>
+                            </div>
+                        </div>
+
+                        <!-- BODY CONTENT TABLE / ROWS -->
+                        <div class="relative z-10 space-y-4 text-xs md:text-sm text-slate-800">
+                            
+                            <!-- Sudah Terima Dari -->
+                            <div class="grid grid-cols-12 gap-2 items-start">
+                                <div class="col-span-4 md:col-span-3 font-semibold text-slate-700">Sudah Terima Dari</div>
+                                <div class="col-span-1 text-center font-bold">:</div>
+                                <div id="viewDiterimaDari" class="col-span-7 md:col-span-8 font-bold text-slate-900 border-b border-dotted border-slate-400 pb-1">
+                                    Bpk. Ahmad Fauzi / PT Sinar Makmur
+                                </div>
+                            </div>
+
+                            <!-- Uang Sejumlah (Terbilang Box) -->
+                            <div class="grid grid-cols-12 gap-2 items-center">
+                                <div class="col-span-4 md:col-span-3 font-semibold text-slate-700">Banyaknya Uang</div>
+                                <div class="col-span-1 text-center font-bold">:</div>
+                                <div class="col-span-7 md:col-span-8">
+                                    <div class="terbilang-box py-2.5">
+                                        <p id="viewTerbilang" class="font-receipt italic font-bold text-pos-blue text-xs md:text-sm leading-relaxed capitalize">
+                                            "Satu Juta Lima Ratus Ribu Rupiah"
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Untuk Pembayaran -->
+                            <div class="grid grid-cols-12 gap-2 items-start">
+                                <div class="col-span-4 md:col-span-3 font-semibold text-slate-700">Untuk Pembayaran</div>
+                                <div class="col-span-1 text-center font-bold">:</div>
+                                <div id="viewUntukPembayaran" class="col-span-7 md:col-span-8 text-slate-800 border-b border-dotted border-slate-400 pb-1 leading-relaxed">
+                                    Biaya Pengiriman Logistik Dokumen & Paket POS Express Periode Oktober 2026
+                                </div>
+                            </div>
+
+                            <!-- Metode Pembayaran -->
+                            <div class="grid grid-cols-12 gap-2 items-center">
+                                <div class="col-span-4 md:col-span-3 font-semibold text-slate-700">Metode Bayar</div>
+                                <div class="col-span-1 text-center font-bold">:</div>
+                                <div class="col-span-7 md:col-span-8">
+                                    <span id="viewMetode" class="bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded text-xs font-bold text-pos-blue">TUNAI</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- FOOTER SECTION: NOMINAL & SIGNATURE -->
+                        <div class="relative z-10 mt-8 pt-4 border-t border-slate-200">
+                            <div class="flex flex-row justify-between items-end">
+                                
+                                <!-- Nominal Display Box -->
+                                <div class="w-1/2">
+                                    <span class="text-[10px] text-slate-500 font-bold uppercase block mb-1">Jumlah Terbilang (Rp)</span>
+                                    <div class="inline-flex items-center border-b border-slate-500 px-1 py-2">
+                                        <span class="text-sm md:text-base font-bold mr-2">Rp</span>
+                                        <span id="viewNominal" class="text-base md:text-xl font-bold font-mono tracking-tight">1.500.000,-</span>
+                                    </div>
+                                </div>
+
+                                <!-- Signature & Date Box -->
+                                <div class="w-1/2 text-center relative">
+                                    <p id="viewKotaTanggal" class="text-xs text-slate-800 mb-1">Ende, 27 Oktober 2026</p>
+                                    <p id="viewJabatan" class="text-[11px] font-semibold text-slate-600">Penjualan Bisnis Ritel dan Kemitraan</p>
+
+                                    <!-- Digital Stamp (Stempel Pos Indonesia) -->
+                                    <div id="stampWrapper" class="relative my-2 flex h-24 items-center justify-center">
+                                        <div id="posStamp" class="flex h-20 w-20 flex-col items-center justify-center rounded-full border-2 border-pos-blue/70 text-pos-blue/80 -rotate-12 pointer-events-none select-none">
+                                            <div class="border-t border-b border-pos-blue/70 text-[8px] font-black uppercase px-1">POS INDONESIA</div>
+                                            <div class="text-[9px] font-bold">ENDE 86300</div>
+                                            <div class="text-[7px] italic">LOKET UTAMA</div>
+                                        </div>
+                                        <img id="receiptStampImage" class="absolute inset-0 h-full w-full object-contain" alt="Stempel kwitansi" hidden>
+                                    </div>
+                                    <div id="stampPlaceholder" class="text-slate-400 italic text-[10px]">
+                                        ( Tanda Tangan & Cap )
+                                    </div>
+
+                                    <p id="viewPetugas" class="font-bold text-slate-900 text-xs md:text-sm border-b border-slate-800 inline-block px-4 pb-0.5">
+                                        Edison Leonard
+                                    </p>
+                                    <p class="mt-1 text-[10px] text-slate-700">Nippos: <span id="viewNippos">-</span></p>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- RECEIPT FOOTER NOTICE -->
+                        <div class="relative z-10 mt-6 pt-2 border-t border-dashed border-slate-300 flex justify-between items-center text-[9px] text-slate-400">
+                            <span>* Kwitansi ini sah apabila dilengkapi dengan stempel/tanda tangan resmi Kantorpos Ende.</span>
+                            <span class="font-mono">POS-ENDE-OFFICIAL</span>
+                        </div>
+
+                    </div>
+                    <!-- End Receipt Card -->
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // DEFAULT LOGO POS INDONESIA
+        const DEFAULT_LOGO = "pos-logo_rvgqfe.png";
+        const RECEIPT_STAMP_STORAGE_KEY = 'pos_kwitansi_stamp_image';
+        const RECEIPT_DISPLAY_STORAGE_KEY = 'pos_kwitansi_display_settings';
+        const MAX_RECEIPT_IMAGE_SIZE = 1024 * 1024;
+        let currentHistoryItems = [];
+
+        // INIT DATA ON LOAD
+        window.onload = function() {
+            // Set Default Date to Today
+            const today = new Date();
+            const options = { day: 'numeric', month: 'Long', year: 'numeric' };
+            const formattedDate = today.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            
+            // Set Default Values to Inputs
+            document.getElementById('inputNoKwitansi').value = "KW/POS/" + today.getFullYear() + "/" + Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('inputDiterimaDari').value = "Bpk. Ahmad Fauzi / PT Sinar Makmur";
+            document.getElementById('inputNominal').value = "1.500.000";
+            document.getElementById('inputUntukPembayaran').value = "Biaya Pengiriman Logistik Dokumen & Paket POS Express Periode " + today.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+            document.getElementById('inputKotaTanggal').value = "Ende, " + formattedDate;
+            document.getElementById('inputPetugas').value = "Maria G. Nona";
+            document.getElementById('inputJabatan').value = "Petugas Loket / Kasir";
+            document.getElementById('inputNippos').value = "";
+            loadReceiptImages();
+            
+            // Trigger Initial Terbilang & Update
+            formatNominalAndTerbilang(document.getElementById('inputNominal'));
+            updateReceipt();
+            loadHistory();
+
+            // Bind Event Listeners for Live Updates
+            const inputs = ['inputNoKwitansi', 'inputDiterimaDari', 'inputTerbilang', 'inputUntukPembayaran', 'inputKotaTanggal', 'inputPetugas', 'inputJabatan', 'inputNippos'];
+            inputs.forEach(id => {
+                document.getElementById(id).addEventListener('input', updateReceipt);
+            });
+
+            document.getElementById('inputStampImage').addEventListener('change', handleReceiptImageUpload);
+            document.getElementById('removeStampImage').addEventListener('click', removeReceiptImage);
+        };
+
+        // TERBILANG GENERATOR FUNCTION (INDONESIAN)
+        function penyebut(nilai) {
+            nilai = Math.abs(nilai);
+            const huruf = ["", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas"];
+            let temp = "";
+
+            if (nilai < 12) {
+                temp = " " + huruf[nilai];
+            } else if (nilai < 20) {
+                temp = penyebut(nilai - 10) + " Sebelas";
+            } else if (nilai < 100) {
+                temp = penyebut(Math.floor(nilai / 10)) + " Puluh" + penyebut(nilai % 10);
+            } else if (nilai < 200) {
+                temp = " Seratus" + penyebut(nilai - 100);
+            } else if (nilai < 1000) {
+                temp = penyebut(Math.floor(nilai / 100)) + " Ratus" + penyebut(nilai % 100);
+            } else if (nilai < 2000) {
+                temp = " Seribu" + penyebut(nilai - 1000);
+            } else if (nilai < 1000000) {
+                temp = penyebut(Math.floor(nilai / 1000)) + " Ribu" + penyebut(nilai % 1000);
+            } else if (nilai < 1000000000) {
+                temp = penyebut(Math.floor(nilai / 1000000)) + " Juta" + penyebut(nilai % 1000000);
+            } else if (nilai < 1000000000000) {
+                temp = penyebut(Math.floor(nilai / 1000000000)) + " Milyar" + penyebut(Math.floor(nilai % 1000000000));
+            } else if (nilai < 1000000000000000) {
+                temp = penyebut(Math.floor(nilai / 1000000000000)) + " Trilyun" + penyebut(Math.floor(nilai % 1000000000000));
+            }
+            return temp;
+        }
+
+        function terbilang(nilai) {
+            if (nilai < 0) return "Minus " + penyebut(nilai).trim() + " Rupiah";
+            if (nilai === 0) return "Nol Rupiah";
+            return (penyebut(nilai).trim() + " Rupiah").replace(/\s+/g, ' ');
+        }
+
+        // FORMAT NOMINAL INPUT AND AUTO-GENERATE TERBILANG
+        function formatNominalAndTerbilang(input) {
+            // Clean non-digit characters
+            let rawValue = input.value.replace(/\D/g, '');
+            if (!rawValue) {
+                input.value = '';
+                document.getElementById('inputTerbilang').value = '';
+                updateReceipt();
+                return;
+            }
+
+            // Format number with dots (Indonesian thousand separator)
+            let formatted = parseInt(rawValue, 10).toLocaleString('id-ID');
+            input.value = formatted;
+
+            // Generate Terbilang
+            let num = parseInt(rawValue, 10);
+            let textTerbilang = terbilang(num);
+            document.getElementById('inputTerbilang').value = textTerbilang;
+
+            updateReceipt();
+        }
+
+        // LIVE UPDATE PREVIEW
+        function updateReceipt() {
+            document.getElementById('viewNoKwitansi').innerText = document.getElementById('inputNoKwitansi').value || '-';
+            document.getElementById('viewDiterimaDari').innerText = document.getElementById('inputDiterimaDari').value || '-';
+            document.getElementById('viewNominal').innerText = (document.getElementById('inputNominal').value || '0') + ',-';
+            
+            let terbilangText = document.getElementById('inputTerbilang').value || 'Nol Rupiah';
+            document.getElementById('viewTerbilang').innerText = `"${terbilangText}"`;
+
+            document.getElementById('viewUntukPembayaran').innerText = document.getElementById('inputUntukPembayaran').value || '-';
+            document.getElementById('viewMetode').innerText = document.getElementById('inputMetode').value;
+            document.getElementById('viewKotaTanggal').innerText = document.getElementById('inputKotaTanggal').value || '-';
+            document.getElementById('viewPetugas').innerText = document.getElementById('inputPetugas').value || '...................';
+            document.getElementById('viewNippos').innerText = document.getElementById('inputNippos').value || '-';
+            document.getElementById('viewJabatan').innerText = document.getElementById('inputJabatan').value || 'Petugas Loket';
+
+            // Show/Hide Stamp
+            const showStamp = document.getElementById('inputShowStamp').checked;
+            const stampImage = document.getElementById('receiptStampImage');
+            const hasCustomStamp = Boolean(stampImage.getAttribute('src'));
+            document.getElementById('posStamp').hidden = !showStamp || hasCustomStamp;
+            stampImage.hidden = !showStamp || !hasCustomStamp;
+            document.getElementById('stampPlaceholder').hidden = !showStamp || hasCustomStamp;
+        }
+
+        function loadReceiptImages() {
+            try {
+                const displaySettings = JSON.parse(localStorage.getItem(RECEIPT_DISPLAY_STORAGE_KEY) || '{}');
+                if (typeof displaySettings.showStamp === 'boolean') {
+                    document.getElementById('inputShowStamp').checked = displaySettings.showStamp;
+                }
+                setReceiptImage(localStorage.getItem(RECEIPT_STAMP_STORAGE_KEY));
+            } catch (error) {
+                console.error('Gagal memuat pengaturan stempel kwitansi.', error);
+                alert('Pengaturan stempel gagal dimuat dari browser.');
+            }
+        }
+
+        function saveReceiptDisplaySettings() {
+            const settings = {
+                showStamp: document.getElementById('inputShowStamp').checked
+            };
+            try {
+                localStorage.setItem(RECEIPT_DISPLAY_STORAGE_KEY, JSON.stringify(settings));
+            } catch (error) {
+                console.error('Gagal menyimpan pengaturan gambar kwitansi.', error);
+                alert('Pengaturan tampil/sembunyi tidak dapat disimpan di browser.');
+            }
+            updateReceipt();
+        }
+
+        function setReceiptImage(dataUrl) {
+            const preview = document.getElementById('stampImagePreview');
+            const receiptImage = document.getElementById('receiptStampImage');
+            const removeButton = document.getElementById('removeStampImage');
+
+            [preview, receiptImage].forEach(image => {
+                if (dataUrl) {
+                    image.src = dataUrl;
+                } else {
+                    image.removeAttribute('src');
+                }
+            });
+            preview.classList.toggle('hidden', !dataUrl);
+            removeButton.classList.toggle('hidden', !dataUrl);
+            updateReceipt();
+        }
+
+        function removeWhiteBackground(dataUrl) {
+            return new Promise((resolve, reject) => {
+                const image = new Image();
+                image.onload = () => {
+                    try {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = image.naturalWidth;
+                        canvas.height = image.naturalHeight;
+                        const context = canvas.getContext('2d');
+                        if (!context) {
+                            reject(new Error('Kanvas gambar tidak tersedia.'));
+                            return;
+                        }
+
+                        context.drawImage(image, 0, 0);
+                        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                        const pixels = imageData.data;
+                        for (let i = 0; i < pixels.length; i += 4) {
+                            const minimumChannel = Math.min(pixels[i], pixels[i + 1], pixels[i + 2]);
+                            if (minimumChannel >= 245) {
+                                pixels[i + 3] = 0;
+                            } else if (minimumChannel >= 210) {
+                                pixels[i + 3] = Math.round(pixels[i + 3] * (245 - minimumChannel) / 35);
+                            }
+                        }
+
+                        context.putImageData(imageData, 0, 0);
+                        resolve(canvas.toDataURL('image/png'));
+                    } catch (error) {
+                        reject(error);
+                    }
+                };
+                image.onerror = () => reject(new Error('Gambar tidak dapat diproses.'));
+                image.src = dataUrl;
+            });
+        }
+
+        function handleReceiptImageUpload(event) {
+            const file = event.target.files[0];
+            event.target.value = '';
+            if (!file) return;
+
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+            if (!allowedTypes.includes(file.type)) {
+                alert('Pilih gambar berformat JPG, PNG, atau WEBP.');
+                return;
+            }
+            if (file.size > MAX_RECEIPT_IMAGE_SIZE) {
+                alert('Ukuran gambar maksimal 1 MB.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = async () => {
+                const dataUrl = reader.result;
+                if (typeof dataUrl !== 'string') {
+                    alert('Gambar tidak dapat dibaca. Silakan pilih file gambar lain.');
+                    return;
+                }
+
+                let processedDataUrl;
+                try {
+                    processedDataUrl = await removeWhiteBackground(dataUrl);
+                } catch (error) {
+                    console.error('Gagal menghapus latar putih gambar stempel.', error);
+                    alert('Latar gambar stempel gagal dihapus. Silakan coba file gambar lain.');
+                    return;
+                }
+
+                setReceiptImage(processedDataUrl);
+                try {
+                    localStorage.setItem(RECEIPT_STAMP_STORAGE_KEY, processedDataUrl);
+                } catch (error) {
+                    console.error('Gagal menyimpan gambar kwitansi.', error);
+                    alert('Gambar sudah ditampilkan, tetapi gagal disimpan di browser. Hapus beberapa data browser lalu coba lagi agar gambar tetap tersedia setelah halaman ditutup.');
+                }
+            };
+            reader.onerror = () => {
+                console.error('Gagal membaca file gambar kwitansi.', reader.error);
+                alert('File gambar gagal dibaca. Silakan coba file lain.');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeReceiptImage() {
+            try {
+                localStorage.removeItem(RECEIPT_STAMP_STORAGE_KEY);
+                setReceiptImage(null);
+            } catch (error) {
+                console.error('Gagal menghapus gambar kwitansi.', error);
+                alert('Gambar gagal dihapus dari penyimpanan browser.');
+            }
+        }
+
+        // HANDLE CUSTOM LOGO UPLOAD
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const src = e.target.result;
+                    document.getElementById('receiptLogo').src = src;
+                    document.getElementById('logoPreviewThumb').src = src;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // RESET TO DEFAULT POS LOGO
+        function resetDefaultLogo() {
+            document.getElementById('receiptLogo').src = DEFAULT_LOGO;
+            document.getElementById('logoPreviewThumb').src = DEFAULT_LOGO;
+            document.getElementById('logoInput').value = '';
+        }
+
+        // DOWNLOAD AS PNG IMAGE
+        function downloadAsImage() {
+            const receipt = document.getElementById('receiptCard');
+            html2canvas(receipt, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff'
+            }).then(canvas => {
+                const link = document.createElement('a');
+                const noKw = document.getElementById('inputNoKwitansi').value.replace(/[^a-zA-Z0-9]/g, '_') || 'Kwitansi';
+                link.download = `Kwitansi_POS_${noKw}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+
+        // RESET FORM TO BLANK/DEFAULTS
+        function resetForm() {
+            if(confirm("Apakah Anda yakin ingin mereset seluruh isian form kwitansi?")) {
+                const today = new Date();
+                const formattedDate = today.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+                
+                document.getElementById('inputNoKwitansi').value = "KW/POS/" + today.getFullYear() + "/" + Math.floor(1000 + Math.random() * 9000);
+                document.getElementById('inputDiterimaDari').value = "";
+                document.getElementById('inputNominal').value = "";
+                document.getElementById('inputTerbilang').value = "";
+                document.getElementById('inputUntukPembayaran').value = "";
+                document.getElementById('inputKotaTanggal').value = "Ende, " + formattedDate;
+                document.getElementById('inputPetugas').value = "Maria G. Nona";
+                document.getElementById('inputJabatan').value = "Petugas Loket / Kasir";
+                document.getElementById('inputNippos').value = "";
+                document.getElementById('inputMetode').value = "TUNAI";
+                document.getElementById('inputShowStamp').checked = true;
+                saveReceiptDisplaySettings();
+
+                resetDefaultLogo();
+                updateReceipt();
+            }
+        }
+
+        // LOCAL STORAGE - SAVE RECEIPT HISTORY
+        function saveToLocalStorage() {
+            const data = {
+                id: Date.now(),
+                no: document.getElementById('inputNoKwitansi').value || 'KW-UNTITLED',
+                dari: document.getElementById('inputDiterimaDari').value || '-',
+                nominal: document.getElementById('inputNominal').value || '0',
+                terbilang: document.getElementById('inputTerbilang').value,
+                untuk: document.getElementById('inputUntukPembayaran').value,
+                tanggal: document.getElementById('inputKotaTanggal').value,
+                petugas: document.getElementById('inputPetugas').value,
+                jabatan: document.getElementById('inputJabatan').value,
+                nippos: document.getElementById('inputNippos').value,
+                metode: document.getElementById('inputMetode').value,
+                tampilkanStempel: document.getElementById('inputShowStamp').checked
+            };
+
+            if (isGoogleAppsScript()) {
+                const button = document.getElementById('saveReceiptButton');
+                button.disabled = true;
+                setHistorySyncStatus('Menyimpan ke Google Sheets...');
+                google.script.run
+                    .withSuccessHandler(result => {
+                        button.disabled = false;
+                        renderHistory(result.items);
+                        setHistorySpreadsheetStatus(result.spreadsheetUrl);
+                        alert('Kwitansi berhasil disimpan ke Google Sheets.');
+                    })
+                    .withFailureHandler(error => {
+                        button.disabled = false;
+                        setHistorySyncStatus('Gagal menyimpan ke Google Sheets.');
+                        console.error('Gagal menyimpan riwayat kwitansi ke Google Sheets.', error);
+                        alert(`Kwitansi gagal disimpan ke Google Sheets: ${error.message || error}`);
+                    })
+                    .saveReceiptHistory(data);
+                return;
+            }
+
+            let history = JSON.parse(localStorage.getItem('pos_kwitansi_history') || '[]');
+            history.unshift(data); // Add to top
+            if(history.length > 10) history.pop(); // Max 10 items
+
+            localStorage.setItem('pos_kwitansi_history', JSON.stringify(history));
+            loadHistory();
+            alert('Kwitansi berhasil disimpan ke Riwayat!');
+        }
+
+        // LOAD HISTORY LIST
+        function loadHistory() {
+            if (isGoogleAppsScript()) {
+                document.getElementById('historyAppLink').classList.add('hidden');
+                setHistorySyncStatus('Memuat riwayat dari Google Sheets...');
+                google.script.run
+                    .withSuccessHandler(result => {
+                        renderHistory(result.items);
+                        setHistorySpreadsheetStatus(result.spreadsheetUrl);
+                    })
+                    .withFailureHandler(error => {
+                        setHistorySyncStatus('Gagal memuat riwayat dari Google Sheets.');
+                        console.error('Gagal memuat riwayat kwitansi dari Google Sheets.', error);
+                        document.getElementById('historyList').innerHTML = '<p class="text-red-500 text-center py-2">Riwayat gagal dimuat dari Google Sheets.</p>';
+                    })
+                    .getReceiptHistory();
+                return;
+            }
+
+            setHistorySyncStatus('Penyimpanan lokal browser; belum tersinkron ke Google Sheets.');
+            document.getElementById('historyAppLink').classList.remove('hidden');
+            document.getElementById('historySpreadsheetLink').classList.add('hidden');
+            let history = JSON.parse(localStorage.getItem('pos_kwitansi_history') || '[]');
+            renderHistory(history);
+        }
+
+        function isGoogleAppsScript() {
+            return typeof google !== 'undefined' && Boolean(google.script && google.script.run);
+        }
+
+        function setHistorySyncStatus(message) {
+            document.getElementById('historySyncStatus').textContent = message;
+        }
+
+        function setHistorySpreadsheetStatus(url) {
+            const link = document.getElementById('historySpreadsheetLink');
+            if (url) {
+                link.href = url;
+                link.classList.remove('hidden');
+            } else {
+                link.classList.add('hidden');
+                link.removeAttribute('href');
+            }
+            setHistorySyncStatus('Riwayat tersinkron ke Google Sheets.');
+        }
+
+        function renderHistory(history) {
+            currentHistoryItems = history;
+            const container = document.getElementById('historyList');
+            const selectionControls = document.getElementById('historySelectionControls');
+
+            if (history.length === 0) {
+                container.innerHTML = `<p class="text-slate-400 italic text-center py-2">Belum ada riwayat tersimpan.</p>`;
+                selectionControls.classList.add('hidden');
+                return;
+            }
+
+            selectionControls.classList.remove('hidden');
+            container.innerHTML = history.map(item => `
+                <div class="p-2 bg-slate-50 hover:bg-blue-50/60 rounded border border-slate-200 flex items-center gap-2 transition cursor-pointer" onclick='restoreHistory(${JSON.stringify(String(item.id))})'>
+                    <input type="checkbox" class="history-item-checkbox h-3.5 w-3.5 shrink-0 rounded border-slate-300 text-pos-blue focus:ring-pos-blue" aria-label="Pilih riwayat ${escapeHistoryText(item.no)}" data-history-id="${escapeHistoryText(item.id)}" onchange="updateHistorySelection()" onclick="event.stopPropagation()">
+                    <div class="truncate pr-2 flex-1">
+                        <span class="font-bold text-slate-800 block">${escapeHistoryText(item.no)}</span>
+                        <span class="text-[11px] text-slate-500">${escapeHistoryText(item.dari)} • Rp ${escapeHistoryText(item.nominal)}</span>
+                    </div>
+                    <button type="button" class="text-[10px] text-pos-blue font-bold bg-white px-2 py-1 rounded border border-blue-200" onclick='event.stopPropagation(); restoreHistory(${JSON.stringify(String(item.id))})' aria-label="Muat kwitansi ${escapeHistoryText(item.no)}">Muat</button>
+                    <button type="button" class="text-[10px] text-red-500 hover:text-red-700 px-1" onclick='event.stopPropagation(); deleteHistoryItem(${JSON.stringify(String(item.id))})' aria-label="Hapus kwitansi ${escapeHistoryText(item.no)}" title="Hapus riwayat ini"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
+            document.getElementById('selectAllHistory').checked = false;
+            updateHistorySelection();
+        }
+
+        function escapeHistoryText(value) {
+            return String(value ?? '').replace(/[&<>"']/g, character => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            })[character]);
+        }
+
+        function updateHistorySelection() {
+            const checkboxes = [...document.querySelectorAll('.history-item-checkbox')];
+            const selectedCount = checkboxes.filter(checkbox => checkbox.checked).length;
+            const deleteButton = document.getElementById('deleteSelectedHistory');
+            deleteButton.disabled = selectedCount === 0;
+            deleteButton.textContent = `Hapus pilihan (${selectedCount})`;
+
+            const selectAll = document.getElementById('selectAllHistory');
+            selectAll.checked = checkboxes.length > 0 && selectedCount === checkboxes.length;
+            selectAll.indeterminate = selectedCount > 0 && selectedCount < checkboxes.length;
+        }
+
+        function toggleAllHistory(checked) {
+            document.querySelectorAll('.history-item-checkbox').forEach(checkbox => {
+                checkbox.checked = checked;
+            });
+            updateHistorySelection();
+        }
+
+        function deleteHistoryItem(id) {
+            if (!confirm('Hapus riwayat kwitansi ini?')) return;
+
+            if (isGoogleAppsScript()) {
+                setHistorySyncStatus('Menghapus riwayat dari Google Sheets...');
+                google.script.run
+                    .withSuccessHandler(result => {
+                        renderHistory(result.items);
+                        setHistorySpreadsheetStatus(result.spreadsheetUrl);
+                    })
+                    .withFailureHandler(error => {
+                        setHistorySyncStatus('Gagal menghapus riwayat dari Google Sheets.');
+                        console.error('Gagal menghapus riwayat kwitansi dari Google Sheets.', error);
+                        alert(`Riwayat gagal dihapus dari Google Sheets: ${error.message || error}`);
+                    })
+                    .deleteReceiptHistory([String(id)]);
+                return;
+            }
+
+            const history = JSON.parse(localStorage.getItem('pos_kwitansi_history') || '[]');
+            localStorage.setItem('pos_kwitansi_history', JSON.stringify(history.filter(item => String(item.id) !== String(id))));
+            loadHistory();
+        }
+
+        function deleteSelectedHistoryItems() {
+            const selectedIds = new Set(
+                [...document.querySelectorAll('.history-item-checkbox:checked')]
+                    .map(checkbox => String(checkbox.dataset.historyId))
+            );
+            if (selectedIds.size === 0) return;
+            if (!confirm(`Hapus ${selectedIds.size} riwayat kwitansi yang dipilih?`)) return;
+
+            if (isGoogleAppsScript()) {
+                setHistorySyncStatus('Menghapus riwayat pilihan dari Google Sheets...');
+                google.script.run
+                    .withSuccessHandler(result => {
+                        renderHistory(result.items);
+                        setHistorySpreadsheetStatus(result.spreadsheetUrl);
+                    })
+                    .withFailureHandler(error => {
+                        setHistorySyncStatus('Gagal menghapus riwayat pilihan dari Google Sheets.');
+                        console.error('Gagal menghapus riwayat pilihan dari Google Sheets.', error);
+                        alert(`Riwayat pilihan gagal dihapus dari Google Sheets: ${error.message || error}`);
+                    })
+                    .deleteReceiptHistory([...selectedIds]);
+                return;
+            }
+
+            const history = JSON.parse(localStorage.getItem('pos_kwitansi_history') || '[]');
+            localStorage.setItem('pos_kwitansi_history', JSON.stringify(history.filter(item => !selectedIds.has(String(item.id)))));
+            loadHistory();
+        }
+
+        // RESTORE HISTORY ITEM
+        function restoreHistory(id) {
+            const history = isGoogleAppsScript()
+                ? currentHistoryItems
+                : JSON.parse(localStorage.getItem('pos_kwitansi_history') || '[]');
+            const item = history.find(h => String(h.id) === String(id));
+            if(item) {
+                document.getElementById('inputNoKwitansi').value = item.no;
+                document.getElementById('inputDiterimaDari').value = item.dari;
+                document.getElementById('inputNominal').value = item.nominal;
+                document.getElementById('inputTerbilang').value = item.terbilang;
+                document.getElementById('inputUntukPembayaran').value = item.untuk;
+                document.getElementById('inputKotaTanggal').value = item.tanggal;
+                document.getElementById('inputPetugas').value = item.petugas;
+                document.getElementById('inputJabatan').value = item.jabatan;
+                document.getElementById('inputNippos').value = item.nippos || '';
+                document.getElementById('inputMetode').value = item.metode || 'TUNAI';
+                document.getElementById('inputShowStamp').checked = item.tampilkanStempel !== false;
+
+                saveReceiptDisplaySettings();
+                updateReceipt();
+            }
+        }
+
+        // CLEAR HISTORY
+        function clearHistory() {
+            if(confirm("Hapus seluruh riwayat kwitansi tersimpan?")) {
+                if (isGoogleAppsScript()) {
+                    setHistorySyncStatus('Menghapus semua riwayat dari Google Sheets...');
+                    google.script.run
+                        .withSuccessHandler(result => {
+                            renderHistory(result.items);
+                            setHistorySpreadsheetStatus(result.spreadsheetUrl);
+                        })
+                        .withFailureHandler(error => {
+                            setHistorySyncStatus('Gagal menghapus riwayat dari Google Sheets.');
+                            console.error('Gagal menghapus semua riwayat dari Google Sheets.', error);
+                            alert(`Riwayat gagal dihapus dari Google Sheets: ${error.message || error}`);
+                        })
+                        .clearReceiptHistory();
+                    return;
+                }
+                localStorage.removeItem('pos_kwitansi_history');
+                loadHistory();
+            }
+        }
+    </script>
+</body>
+</html>
