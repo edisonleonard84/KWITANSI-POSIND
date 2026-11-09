@@ -246,7 +246,7 @@
                         </button>
                     </div>
                     <p id="historySyncStatus" class="mb-2 text-[10px] text-slate-500" role="status">Memeriksa penyimpanan riwayat...</p>
-                    <a id="historyAppLink" class="hidden mb-2 inline-block text-[10px] font-semibold text-pos-blue hover:underline" href="https://script.google.com/macros/s/AKfycbw-AgqCkvPCGIU4lUM6SjG2A3GZCVIx0Ol7Jq3tpFbxwJPISFf_TWA7TA2NG1seeO8/exec" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-table mr-1"></i>Buka aplikasi untuk simpan ke Google Sheets</a>
+                    <a id="historyAppLink" class="hidden mb-2 inline-block text-[10px] font-semibold text-pos-blue hover:underline" href="https://script.google.com/macros/s/AKfycbxIXrRCrGp0zPqiTjWpEeFDBoQB40_O9vLmUfcYMzmRSsjQG9tG1fqA0gwQssbiWH5_/exec" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-table mr-1"></i>Buka aplikasi untuk simpan ke Google Sheets</a>
                     <a id="historySpreadsheetLink" class="hidden mb-2 inline-block text-[10px] font-semibold text-pos-blue hover:underline" target="_blank" rel="noopener noreferrer">Buka Google Sheets</a>
                     <div id="historyList" class="space-y-2 max-h-40 overflow-y-auto text-xs">
                         <p class="text-slate-400 italic text-center py-2">Belum ada riwayat tersimpan.</p>
@@ -599,7 +599,7 @@
 
             localStorage.setItem('pos_kwitansi_history', JSON.stringify(history));
             loadHistory();
-            alert('Kwitansi berhasil disimpan ke Riwayat!');
+            alert('Kwitansi tersimpan di browser ini saja. Untuk menyimpan ke Google Sheets, buka aplikasi Apps Script.');
         }
 
         // LOAD HISTORY LIST
